@@ -6,7 +6,6 @@
 #include "fonts/stdNumb.h"
 #include "fonts/bigNumb.h"
 #include <EEPROM.h>
-#include "language.h"
 #include "messages.h"
 
 //i2c display: SCK -> A5 , SCA -> A4 
@@ -37,9 +36,7 @@ volatile int16_t oldThrottleVal = -1;
 volatile bool btnPressed = false;
 bool bAlarm = false;
 
-uint32_t timer = 0; 
-
-bool WheelSize = true; //whell 8,5"
+uint32_t timer = 0;
 
 uint8_t WDTcounts = 0;
 void(* resetFunc) (void) = 0;

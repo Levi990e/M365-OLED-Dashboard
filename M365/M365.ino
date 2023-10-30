@@ -1,4 +1,5 @@
 #include "defines.h"
+#define defaultFont System5x7mod
 
 bool displayClear(byte ID = 1, bool force = false) {
   volatile static uint8_t oldID = 0;
@@ -26,28 +27,21 @@ void setup() {
     warnBatteryPercent = EEPROM.read(2);
     bigMode = EEPROM.read(3);
     bigWarn = EEPROM.read(4);
-    WheelSize = EEPROM.read(5);
-    cfgCruise = EEPROM.read(6);
-    cfgTailight = EEPROM.read(7);
-    cfgKERS = EEPROM.read(8);
+
   } else {
     EEPROM.put(0, 128);
     EEPROM.put(1, autoBig);
     EEPROM.put(2, warnBatteryPercent);
     EEPROM.put(3, bigMode);
     EEPROM.put(4, bigWarn);
-    EEPROM.put(5, WheelSize);
-    EEPROM.put(6, cfgCruise);
-    EEPROM.put(7, cfgTailight);
-    EEPROM.put(8, cfgKERS);
   }
 
   Wire.begin();
   Wire.setClock(400000L);
   display.begin(&Adafruit128x64, 0x3C);
   
-  // Uncomment to invert the screen. Useful for better vision on the yellow / blue screens
-  //display.displayRemap(true);
+ 
+  //display.displayRemap(true); //uncomment to flip the display upside down
   display.setFont(m365);
   displayClear(0, true);
   display.setCursor(0, 0);
@@ -136,7 +130,7 @@ void fsBattInfo() {
   display.print('.');
   if (tmp_1 < 10) display.print('0');
   display.print(tmp_1);
-  display.print((const __FlashStringHelper *) l_v);
+  display.print("V");
   display.print(' ');
 
   tmp_0 = abs(S25C31.current) / 100;       //current
@@ -147,24 +141,24 @@ void fsBattInfo() {
   display.print('.');
   if (tmp_1 < 10) display.print('0');
   display.print(tmp_1);
-  display.print((const __FlashStringHelper *) l_a);
+  display.print("A");
   display.print(' ');
   if (S25C31.remainCapacity < 1000) display.print(' ');
   if (S25C31.remainCapacity < 100) display.print(' ');
   if (S25C31.remainCapacity < 10) display.print(' ');
   display.print(S25C31.remainCapacity);
-  display.print((const __FlashStringHelper *) l_mah);
+  display.print("mAh");
   int temp;
   temp = S25C31.temp1 - 20;
   display.setCursor(9, 1);
-  display.print((const __FlashStringHelper *) l_t);
+  display.print("T");
   display.print("1: ");
   if (temp < 10) display.print(' ');
   display.print(temp);
   display.print((char)0x80);
   display.print("C");
   display.setCursor(74, 1);
-  display.print((const __FlashStringHelper *) l_t);
+  display.print("T");
   display.print("2: ");
   temp = S25C31.temp2 - 20;
   if (temp < 10) display.print(' ');
@@ -188,7 +182,7 @@ void fsBattInfo() {
     if (v < 100) display.print('0');
     if (v < 10) display.print('0');
     display.print(v);
-    display.print((const __FlashStringHelper *) l_v);
+    display.print("V");
 
     display.setCursor(70, 2 + i);
     display.print(i + 5); 
@@ -200,7 +194,7 @@ void fsBattInfo() {
     if (v < 100) display.print('0');
     if (v < 10) display.print('0');
     display.print(v);
-    display.print((const __FlashStringHelper *) l_v);
+    display.print("V");
 
     ptr++;
     ptr2++;
@@ -234,11 +228,6 @@ void displayFSM() {
   } else {
     c_speed = abs(S23CB0.speed); }; //always + speed, even drive backwards ;)
   // 10 INCH WHEEL SIZE CALCULATE
-  if (WheelSize) {
-    _speed = (long) c_speed * 10 / 8.5; // 10" Whell
-  } else {
-    _speed = c_speed; //8,5" Whell
-  };
  
   m365_info.sph = (uint32_t) abs(_speed) / 1000L; // speed (GOOD)
   m365_info.spl = (uint16_t) c_speed % 1000 / 100;
@@ -279,184 +268,7 @@ void displayFSM() {
       Settings = true;
     }
 
-    if (M365Settings) {
-      if ((throttleVal == 1) && (oldThrottleVal != 1) && (brakeVal == -1) && (oldBrakeVal == -1))                // brake min + throttle max = change menu value
-      switch (sMenuPos) {
-        case 0:
-          cfgCruise = !cfgCruise;
-	  EEPROM.put(6, cfgCruise);
-          break;
-        case 1:
-          if (cfgCruise)
-            prepareCommand(CMD_CRUISE_ON);
-            else
-            prepareCommand(CMD_CRUISE_OFF);
-          break;
-        case 2:
-          cfgTailight = !cfgTailight;
-	  EEPROM.put(7, cfgTailight);
-          break;
-        case 3:
-          if (cfgTailight)
-            prepareCommand(CMD_LED_ON);
-            else
-            prepareCommand(CMD_LED_OFF);
-          break;
-        case 4:
-          switch (cfgKERS) {
-            case 1:
-              cfgKERS = 2;
-	      EEPROM.put(8, cfgKERS);
-              break;
-            case 2:
-              cfgKERS = 0;
-	      EEPROM.put(8, cfgKERS);
-              break;
-            default: 
-              cfgKERS = 1;
-	      EEPROM.put(8, cfgKERS);
-          }
-          break;
-        case 5:
-          switch (cfgKERS) { 
-            case 1:
-              prepareCommand(CMD_MEDIUM);
-              break;
-            case 2:
-              prepareCommand(CMD_STRONG);
-              break;
-            default: 
-              prepareCommand(CMD_WEAK);
-            }
-          break;
-        case 6:
-          WheelSize = !WheelSize;
-          EEPROM.put(5, WheelSize);
-	      break;
-        case 7:
-          oldBrakeVal = brakeVal;
-          oldThrottleVal = throttleVal;
-          timer = millis() + LONG_PRESS;
-          M365Settings = false;
-        break;
-      } else
-      if ((brakeVal == 1) && (oldBrakeVal != 1) && (throttleVal == -1) && (oldThrottleVal == -1)) {               // brake max + throttle min = change menu position
-        if (sMenuPos < 7)
-          sMenuPos++;
-          else
-          sMenuPos = 0;
-        timer = millis() + LONG_PRESS;
-      }
-
-      if (displayClear(7)) sMenuPos = 0;
-      display.set1X();
-      display.setCursor(0, 0);
-
-      if (sMenuPos == 0)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) M365CfgScr1);
-      if (cfgCruise)
-        display.print((const __FlashStringHelper *) l_On);
-        else
-        display.print((const __FlashStringHelper *) l_Off);
-
-      display.setCursor(0, 1);
-
-      if (sMenuPos == 1)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) M365CfgScr2);
-
-      display.setCursor(0, 2);
-
-      if (sMenuPos == 2)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) M365CfgScr3);
-      if (cfgTailight)
-        display.print((const __FlashStringHelper *) l_Yes);
-        else
-        display.print((const __FlashStringHelper *) l_No);
-
-      display.setCursor(0, 3);
-
-      if (sMenuPos == 3)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) M365CfgScr4);
-
-      display.setCursor(0, 4);
-
-      if (sMenuPos == 4)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) M365CfgScr5);
-      switch (cfgKERS) {
-        case 1:
-          display.print((const __FlashStringHelper *) l_Medium);
-          break;
-        case 2:
-          display.print((const __FlashStringHelper *) l_Strong);
-          break;
-        default:
-          display.print((const __FlashStringHelper *) l_Weak);
-          break;
-      }
-
-    display.setCursor(0, 5);
-
-      if (sMenuPos == 5)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) M365CfgScr6);
-
-    display.setCursor(0, 6);
     
-    if (sMenuPos == 6)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-  
-        display.print((const __FlashStringHelper *) M365CfgScr7);
-        if(WheelSize) {
-          display.print((const __FlashStringHelper *) l_10inch);
-        } else  {
-          display.print((const __FlashStringHelper *) l_85inch);
-        }  
-      //display.setCursor(0, 7);
-
-      /*for (int i = 0; i < 25; i++) {
-        display.setCursor(i * 5, 6);
-        display.print('-');
-      }*/
-
-      display.setCursor(0, 7);
-      
-      if (sMenuPos == 7)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) M365CfgScr8);
-
-      oldBrakeVal = brakeVal;
-      oldThrottleVal = throttleVal;
- 
-      return;
-    } else
     if (ShowBattInfo) {
       if ((brakeVal == 1) && (oldBrakeVal != 1) && (throttleVal == -1) && (oldThrottleVal == -1)) {
         oldBrakeVal = brakeVal;
@@ -469,7 +281,7 @@ void displayFSM() {
       fsBattInfo();
 
       display.setCursor(0, 7);
-      display.print((const __FlashStringHelper *) battScr);
+      display.print(">>> Brake to exit <<<");
 
       oldBrakeVal = brakeVal;
       oldThrottleVal = throttleVal;
@@ -519,9 +331,6 @@ void displayFSM() {
           ShowBattInfo = true;
           break;
         case 5:
-          M365Settings = true;
-          break;
-        case 6:
           EEPROM.put(1, autoBig);
           EEPROM.put(2, warnBatteryPercent);
           EEPROM.put(3, bigMode);
@@ -530,7 +339,7 @@ void displayFSM() {
           break;
       } else
       if ((brakeVal == 1) && (oldBrakeVal != 1) && (throttleVal == -1) && (oldThrottleVal == -1)) {               // brake max + throttle min = change menu position
-        if (menuPos < 6)
+        if (menuPos < 5)
           menuPos++;
           else
           menuPos = 0;
@@ -538,7 +347,7 @@ void displayFSM() {
       }
 
       displayClear(2);
-
+      //----------------------------------------
       display.set1X();
       display.setCursor(0, 0);
 
@@ -547,12 +356,12 @@ void displayFSM() {
         else
         display.print(" ");
 
-      display.print((const __FlashStringHelper *) confScr1);
+      display.print("Big speedometer: ");
       if (autoBig)
-        display.print((const __FlashStringHelper *) l_Yes);
+        display.print("YES");
         else
-        display.print((const __FlashStringHelper *) l_No);
-
+        display.print(" NO");
+      //----------------------------------------
       display.setCursor(0, 1);
 
       if (menuPos == 1)
@@ -560,15 +369,15 @@ void displayFSM() {
         else
         display.print(" ");
 
-      display.print((const __FlashStringHelper *) confScr2);
+      display.print("Big speedo.: ");
       switch (bigMode) {
         case 1:
-          display.print((const __FlashStringHelper *) confScr2b);
+          display.print("  SPEED");
           break;
         default:
-          display.print((const __FlashStringHelper *) confScr2a);
+          display.print("CURRENT");
       }
-
+      //----------------------------------------
       display.setCursor(0, 2);
 
       if (menuPos == 2)
@@ -576,7 +385,7 @@ void displayFSM() {
         else
         display.print(" ");
 
-      display.print((const __FlashStringHelper *) confScr3);
+      display.print("Battery warning: ");
       switch (warnBatteryPercent) {
         case 5:
           display.print(" 5%");
@@ -588,23 +397,23 @@ void displayFSM() {
           display.print("15%");
           break;
         default:
-          display.print((const __FlashStringHelper *) l_Off);
+          display.print("OFF");
           break;
       }
-
+      //----------------------------------------
       display.setCursor(0, 3);
-
+      
       if (menuPos == 3)
         display.print((char)0x7E);
         else
         display.print(" ");
 
-      display.print((const __FlashStringHelper *) confScr4);
+      display.print("Big batt. warn.: ");
       if (bigWarn)
-        display.print((const __FlashStringHelper *) l_Yes);
+        display.print("YES");
         else
-        display.print((const __FlashStringHelper *) l_No);
-
+        display.print(" NO");
+      //----------------------------------------
       display.setCursor(0, 4);
 
       if (menuPos == 4)
@@ -612,39 +421,20 @@ void displayFSM() {
         else
         display.print(" ");
 
-      display.print((const __FlashStringHelper *) confScr5);
+      display.print("Battery info");
+      //----------------------------------------
 
       display.setCursor(0, 5);
-
+      display.print(" - Modified by Levi -");
+      //----------------------------------------
+      display.setCursor(0, 6);
+      
       if (menuPos == 5)
         display.print((char)0x7E);
         else
         display.print(" ");
 
-      display.print((const __FlashStringHelper *) confScr6);
-
-      display.setCursor(0, 6);
-
-      for (uint8_t i = 0; i < 25; i++) {
-        display.setCursor(i * 5, 6);
-        display.print('-');
-      }
-
-      display.setCursor(0, 7);
-
-      if (menuPos == 6)
-        display.print((char)0x7E);
-        else
-        display.print(" ");
-
-      display.print((const __FlashStringHelper *) confScr7);
-
-      display.setCursor(0, 8);
-
-      if (menuPos == 7)
-        display.print((char)0x7E);
-      else
-        display.print(" ");
+      display.print("Save and exit");
 
       oldBrakeVal = brakeVal;
       oldThrottleVal = throttleVal;
@@ -657,7 +447,7 @@ void displayFSM() {
       display.set1X();
       display.setFont(defaultFont);
       display.setCursor(0, 0);
-      display.print((const __FlashStringHelper *) infoScr1);
+      display.print("Total distance");
       display.print(':');
       display.setFont(stdNumb);
       display.setCursor(15, 1);
@@ -671,10 +461,10 @@ void displayFSM() {
       if (tmp_1 < 10) display.print('0');
       display.print(tmp_1);
       display.setFont(defaultFont);
-      display.print((const __FlashStringHelper *) l_km);
+      display.print("km");
 
       display.setCursor(0, 5);
-      display.print((const __FlashStringHelper *) infoScr2);
+      display.print("Power on time");
       display.print(':');
       display.setFont(stdNumb);
       display.setCursor(15, 6);
@@ -729,7 +519,7 @@ void displayFSM() {
           if ((S25C31.current >= 0) || ((S25C31.current < 0) && (millis() % 1000 < 500))) {
             display.set2X();
             display.setCursor(108, 4);
-            display.print((const __FlashStringHelper *) l_a);
+            display.print("A");
           }
           display.set1X();
           display.setCursor(64, 5);
@@ -781,7 +571,7 @@ void displayFSM() {
         display.print('.');
         display.print(m365_info.spl);
         display.setFont(defaultFont);
-        display.print((const __FlashStringHelper *) l_kmh);
+        display.print("km/h");
         display.setFont(stdNumb);
 
         display.setCursor(95, 0);
@@ -790,7 +580,7 @@ void displayFSM() {
         display.print(m365_info.temp);
         display.setFont(defaultFont);
         display.print((char)0x80);
-        display.print((const __FlashStringHelper *) l_c);
+        display.print("C");
         display.setFont(stdNumb);
 
         display.setCursor(0, 2);
@@ -801,7 +591,7 @@ void displayFSM() {
         if (m365_info.mill < 10) display.print('0');
         display.print(m365_info.mill);
         display.setFont(defaultFont);
-        display.print((const __FlashStringHelper *) l_km);
+        display.print("km");
         display.setFont(stdNumb);
 
         display.setCursor(0, 4);
@@ -820,7 +610,7 @@ void displayFSM() {
         if (m365_info.curl < 10) display.print('0');
         display.print(m365_info.curl);
         display.setFont(defaultFont);
-        display.print((const __FlashStringHelper *) l_a);
+        display.print("A");
       }
       showBatt(S25C31.remainPercent, S25C31.current < 0);
     }
@@ -1116,61 +906,6 @@ uint8_t preloadQueryFromTable(unsigned char index) {
   _Query.cs = calcCs((uint8_t*)&_Query.buf[2], _Query.DataLen);    //calculate cs of buffer
 
   return 0;
-}
-
-void prepareCommand(uint8_t cmd) {
-  uint8_t* ptrBuf;
-
-  _cmd.len  =    4;
-  _cmd.addr = 0x20;
-  _cmd.rlen = 0x03;
-
-  switch(cmd){
-    case CMD_CRUISE_ON:   //0x7C, 0x01, 0x00
-      _cmd.param = 0x7C;
-      _cmd.value =    1;
-      break;
-    case CMD_CRUISE_OFF:  //0x7C, 0x00, 0x00
-      _cmd.param = 0x7C;
-      _cmd.value =    0;
-      break;
-    case CMD_LED_ON:      //0x7D, 0x02, 0x00
-      _cmd.param = 0x7D;  
-      _cmd.value =    2;
-      break;
-    case CMD_LED_OFF:     //0x7D, 0x00, 0x00
-      _cmd.param = 0x7D;
-      _cmd.value =    0;
-      break;
-    case CMD_WEAK:        //0x7B, 0x00, 0x00
-      _cmd.param = 0x7B;
-      _cmd.value =    0;
-      break;
-    case CMD_MEDIUM:      //0x7B, 0x01, 0x00
-      _cmd.param = 0x7B;
-      _cmd.value =    1;
-      break;
-    case CMD_STRONG:      //0x7B, 0x02, 0x00
-      _cmd.param = 0x7B;
-      _cmd.value =    2;
-      break;
-    default:
-      return; //undefined command - do nothing
-      break;
-  }
-  ptrBuf = (uint8_t*)&_Query.buf;
-
-  memcpy_P((void*)ptrBuf, (void*)_h0, sizeof(_h0));  //copy preamble
-  ptrBuf += sizeof(_h0);
-
-  memcpy((void*)ptrBuf, (void*)&_cmd, sizeof(_cmd)); //copy command body
-  ptrBuf += sizeof(_cmd);
-
-  //unsigned char 
-  _Query.DataLen = ptrBuf - (uint8_t*)&_Query.buf[2];               //calculate length of data in buf, w\o preamble and cs
-  _Query.cs = calcCs((uint8_t*)&_Query.buf[2], _Query.DataLen);     //calculate cs of buffer
-
-  _Query.prepared = 1;
 }
 
 void writeQuery() {
