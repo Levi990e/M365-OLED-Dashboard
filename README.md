@@ -1,5 +1,7 @@
 # Xiaomi M365 Display
-<img src="" width="200" height="264" />
+<img src="https://cdn.discordapp.com/attachments/1082291382305169510/1168512901280186468/IMG_20231030_122312.jpg" width="200" height="264" />
+Original code from: https://github.com/augisbud/m365_dashboard
+Modified for my own usage and liking, original uses a Ardunio Mini, but I could never get that to work.
 
 # Products Used
 Arduino Pro Micro
@@ -17,6 +19,7 @@ I'd recommend you to use Arduino 1.6.6
 https://www.arduino.cc/en/Main/OldSoftwareReleases  
 
 # Physical Connections  
+WIP
 
 # Updating M365 firmware / Disabling the Dashboard
 Turn on the scooter and immediately engage and hold the throttle and brake before the logo disappears from the dashboard LCD. You will enter on dashboard disabled mode.

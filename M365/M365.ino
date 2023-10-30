@@ -107,7 +107,8 @@ void showBatt(int percent, bool blinkIt) {
     if (percent < 10) display.print(' ');
     display.print(percent);
     display.print('\%');
-  } else
+  } 
+  else
   for (int i = 0; i < 34; i++) {
     display.setCursor(i * 5, 7);
     display.print(' ');
@@ -226,8 +227,8 @@ void displayFSM() {
   if (S23CB0.speed < -10000) {// If speed if more than 32.767 km/h (32767)
     c_speed = S23CB0.speed + 32768 + 32767; // calculate speed over 32.767 (hex 0x8000 and above) add 32768 and 32767 to conver to unsigned int
   } else {
-    c_speed = abs(S23CB0.speed); }; //always + speed, even drive backwards ;)
-  // 10 INCH WHEEL SIZE CALCULATE
+  c_speed = abs(S23CB0.speed); }; //always + speed, even drive backwards ;)
+  _speed = c_speed;
  
   m365_info.sph = (uint32_t) abs(_speed) / 1000L; // speed (GOOD)
   m365_info.spl = (uint16_t) c_speed % 1000 / 100;
@@ -242,7 +243,6 @@ void displayFSM() {
 
   if ((m365_info.sph > 1) && Settings) {
     ShowBattInfo = false;
-    M365Settings = false;
     Settings = false;
   }
 
@@ -441,7 +441,7 @@ void displayFSM() {
  
       return;
     } else
-    if ((throttleVal == 1) && (oldThrottleVal != 1) && (brakeVal == -1) && (oldBrakeVal == -1)) {
+    if ((throttleVal == 1) && (oldThrottleVal != 1) && (brakeVal == -1) && (oldBrakeVal == -1)) {                          //standing + throttle max = show info screen
       displayClear(3);
 
       display.set1X();
@@ -463,19 +463,19 @@ void displayFSM() {
       display.setFont(defaultFont);
       display.print("km");
 
-      display.setCursor(0, 5);
-      display.print("Power on time");
-      display.print(':');
-      display.setFont(stdNumb);
-      display.setCursor(15, 6);
-      tmp_0 = S23C3A.powerOnTime / 60;
-      tmp_1 = S23C3A.powerOnTime % 60;
-      if (tmp_0 < 100) display.print(' '); 
-      if (tmp_0 < 10) display.print(' ');
-      display.print(tmp_0);
-      display.print(':');
-      if (tmp_1 < 10) display.print('0');
-      display.print(tmp_1);
+      //display.setCursor(0, 5);
+      //display.print("Power on time");
+      //display.print(':');
+      //display.setFont(stdNumb);
+      //display.setCursor(15, 6);
+      //tmp_0 = S23C3A.powerOnTime / 60;
+      //tmp_1 = S23C3A.powerOnTime % 60;
+      //if (tmp_0 < 100) display.print(' '); 
+      //if (tmp_0 < 10) display.print(' ');
+      //display.print(tmp_0);
+      //display.print(':');
+      //if (tmp_1 < 10) display.print('0');
+      //display.print(tmp_1);
 
       return;
     }
@@ -585,6 +585,9 @@ void displayFSM() {
 
         display.setCursor(0, 2);
 
+
+
+        display.setCursor(0, 4);
         if (m365_info.milh < 10) display.print(' ');
         display.print(m365_info.milh);
         display.print('.');
@@ -593,24 +596,21 @@ void displayFSM() {
         display.setFont(defaultFont);
         display.print("km");
         display.setFont(stdNumb);
+        
 
-        display.setCursor(0, 4);
 
-        if (m365_info.Min < 10) display.print('0');
-        display.print(m365_info.Min);
-        display.print(':');
-        if (m365_info.Sec < 10) display.print('0');
-        display.print(m365_info.Sec);
-
-        display.setCursor(68, 4);
-
-        if (m365_info.curh < 10) display.print(' ');
-        display.print(m365_info.curh);
-        display.print('.');
-        if (m365_info.curl < 10) display.print('0');
-        display.print(m365_info.curl);
+        display.setCursor(90, 4);
+        display.print(S25C31.remainPercent);
         display.setFont(defaultFont);
-        display.print("A");
+        display.print("%");
+
+        //if (m365_info.curh < 10) display.print(' ');
+        //display.print(m365_info.curh);
+        //display.print('.');
+        //if (m365_info.curl < 10) display.print('0');
+        //display.print(m365_info.curl);
+        //display.setFont(defaultFont);
+        //display.print("A");
       }
       showBatt(S25C31.remainPercent, S25C31.current < 0);
     }

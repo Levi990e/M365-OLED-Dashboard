@@ -22,7 +22,6 @@ bool bigWarn = true;
 
 bool Settings = false;
 bool ShowBattInfo = false;
-bool M365Settings = false;
 
 uint8_t menuPos = 0;
 uint8_t sMenuPos = 0;
