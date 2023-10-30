@@ -26,10 +26,6 @@ bool ShowBattInfo = false;
 uint8_t menuPos = 0;
 uint8_t sMenuPos = 0;
 
-bool cfgCruise = false;
-bool cfgTailight = false;
-uint8_t cfgKERS = 0;
-
 volatile int16_t oldBrakeVal = -1;
 volatile int16_t oldThrottleVal = -1;
 volatile bool btnPressed = false;

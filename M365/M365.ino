@@ -463,19 +463,14 @@ void displayFSM() {
       display.setFont(defaultFont);
       display.print("km");
 
-      //display.setCursor(0, 5);
-      //display.print("Power on time");
-      //display.print(':');
-      //display.setFont(stdNumb);
-      //display.setCursor(15, 6);
-      //tmp_0 = S23C3A.powerOnTime / 60;
-      //tmp_1 = S23C3A.powerOnTime % 60;
-      //if (tmp_0 < 100) display.print(' '); 
-      //if (tmp_0 < 10) display.print(' ');
-      //display.print(tmp_0);
-      //display.print(':');
-      //if (tmp_1 < 10) display.print('0');
-      //display.print(tmp_1);
+      display.setCursor(0, 5);
+      display.set1X();
+      display.setFont(stdNumb);
+      if (m365_info.Min < 10) display.print('0');
+      display.print(m365_info.Min);
+      display.print(':');
+      if (m365_info.Sec < 10) display.print('0');
+      display.print(m365_info.Sec);
 
       return;
     }
@@ -562,7 +557,7 @@ void displayFSM() {
           m365_info.mill = m365_info.mill/1.609;
           m365_info.temp = m365_info.temp*9/5+32;
         #endif
-        display.set1X();
+        display.set2X();
         display.setFont(stdNumb);
         display.setCursor(0, 0);
 
@@ -570,12 +565,13 @@ void displayFSM() {
         display.print(m365_info.sph);
         display.print('.');
         display.print(m365_info.spl);
+        display.set1X();
         display.setFont(defaultFont);
         display.print("km/h");
         display.setFont(stdNumb);
 
-        display.setCursor(95, 0);
-
+        display.setCursor(95, 4);
+        display.set1X();
         if (m365_info.temp < 10) display.print(' ');
         display.print(m365_info.temp);
         display.setFont(defaultFont);
@@ -587,7 +583,7 @@ void displayFSM() {
 
 
 
-        display.setCursor(0, 4);
+        display.setCursor(0, 6);
         if (m365_info.milh < 10) display.print(' ');
         display.print(m365_info.milh);
         display.print('.');
@@ -599,7 +595,7 @@ void displayFSM() {
         
 
 
-        display.setCursor(90, 4);
+        display.setCursor(90, 6);
         display.print(S25C31.remainPercent);
         display.setFont(defaultFont);
         display.print("%");
@@ -612,7 +608,7 @@ void displayFSM() {
         //display.setFont(defaultFont);
         //display.print("A");
       }
-      showBatt(S25C31.remainPercent, S25C31.current < 0);
+      //showBatt(S25C31.remainPercent, S25C31.current < 0);
     }
 }
 
