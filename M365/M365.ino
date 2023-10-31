@@ -557,7 +557,7 @@ void displayFSM() {
           m365_info.mill = m365_info.mill/1.609;
           m365_info.temp = m365_info.temp*9/5+32;
         #endif
-        display.set2X();
+        display.set2X();                              //speed display on main screen
         display.setFont(stdNumb);
         display.setCursor(0, 0);
 
@@ -570,7 +570,7 @@ void displayFSM() {
         display.print("km/h");
         display.setFont(stdNumb);
 
-        display.setCursor(95, 4);
+        display.setCursor(95, 4);                    //temoperature display on main screen
         display.set1X();
         if (m365_info.temp < 10) display.print(' ');
         display.print(m365_info.temp);
@@ -583,7 +583,7 @@ void displayFSM() {
 
 
 
-        display.setCursor(0, 6);
+        display.setCursor(0, 6);                      //travel distance display on main screen
         if (m365_info.milh < 10) display.print(' ');
         display.print(m365_info.milh);
         display.print('.');
@@ -595,7 +595,7 @@ void displayFSM() {
         
 
 
-        display.setCursor(90, 6);
+        display.setCursor(90, 6);                     //battery percentage on main screen
         display.print(S25C31.remainPercent);
         display.setFont(defaultFont);
         display.print("%");

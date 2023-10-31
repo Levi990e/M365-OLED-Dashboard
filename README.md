@@ -6,8 +6,8 @@ Credit & Original code from: https://github.com/augisbud/m365_dashboard
 Modified for my own usage and liking, original uses a Ardunio Mini, but I am using a Arduino Mini for this.
 
 # Products Used
-Arduino Pro Micro  
-I2C OLED 0.96" or 1.3" Screen  
+Arduino Pro Nano  
+I2C OLED 0.96" 
 3d Printed Bracket  
 1N4148 Diode  
 0.25w 120ohm Resistor  
