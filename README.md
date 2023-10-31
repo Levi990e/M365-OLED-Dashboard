@@ -1,7 +1,7 @@
 # Xiaomi M365 Display
-<img src="https://cdn.discordapp.com/attachments/1082291382305169510/1168512901280186468/IMG_20231030_122312.jpg" width="200" height="400" />  
-Original code from: https://github.com/augisbud/m365_dashboard  
-Modified for my own usage and liking, original uses a Ardunio Mini, but I could never get that to work.  
+<img src="https://cdn.discordapp.com/attachments/1082291382305169510/1168512901280186468/IMG_20231030_122312.jpg" width="200" height="350" />  
+Original code from: https://github.com/augisbud/m365_dashboard         
+Modified for my own usage and liking, original uses a Ardunio Mini, but I could never get that to work.   
 
 # Products Used
 Arduino Pro Micro  
@@ -15,13 +15,8 @@ These libraries are needed for the code to work, can be installed inside the Ard
 - SSD1306Ascii by Bill Greiman   
 - WatchDog by Nadav Matalon   
 
-Please install the libraries I provided in the files, install them to you arduino library folder, usually              
-  C:\Users\\%username%\Documents\Arduino\libraries  
-I'd recommend you to use Arduino 1.6.6  
-https://www.arduino.cc/en/Main/OldSoftwareReleases  
-
 # Physical Connections  
-WIP   
+<img src="https://raw.githubusercontent.com/Levi990e/M365-Dashboard/master/diagram.png?token=GHSAT0AAAAAACJEMPG4LZDTRXUUP3MVSZ36ZKAZY5Q" width="600" height="600" /> 
 
 # Updating M365 firmware / Disabling the Dashboard
 Turn on the scooter and immediately engage and hold the throttle and brake before the logo disappears from the dashboard LCD. You will enter on dashboard disabled mode.
@@ -37,3 +32,4 @@ GND To Black
 BUS To Yellow  
 
 # UI
+WIP

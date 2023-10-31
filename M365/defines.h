@@ -8,7 +8,7 @@
 #include <EEPROM.h>
 #include "messages.h"
 
-//i2c display: SCK -> A5 , SCA -> A4 
+//i2c display: SCL -> A5 , SDA -> A4 
 SSD1306AsciiWire display;
 
 MessagesClass Message;
