@@ -16,7 +16,7 @@ These libraries are needed for the code to work, can be installed inside the Ard
 - WatchDog by Nadav Matalon   
 
 # Physical Connections  
-<img src="https://raw.githubusercontent.com/Levi990e/M365-Dashboard/master/diagram.png?token=GHSAT0AAAAAACJEMPG4LZDTRXUUP3MVSZ36ZKAZY5Q" width="600" height="600" /> 
+<img src="https://raw.githubusercontent.com/Levi990e/M365-Dashboard/master/pics/diagram.png?token=GHSAT0AAAAAACJEMPG5E37XCFSWTVDCRSUAZKAZ3AQ" width="600" height="600" /> 
 
 # Updating M365 firmware / Disabling the Dashboard
 Turn on the scooter and immediately engage and hold the throttle and brake before the logo disappears from the dashboard LCD. You will enter on dashboard disabled mode.
