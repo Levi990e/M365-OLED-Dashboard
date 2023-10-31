@@ -7,7 +7,7 @@ Modified for my own usage and liking, original uses a Ardunio Mini, but I am usi
 
 # Products Used
 Arduino Pro Nano  
-I2C OLED 0.96" 
+I2C OLED 0.96"  
 3d Printed Bracket  
 1N4148 Diode  
 0.25w 120ohm Resistor  
