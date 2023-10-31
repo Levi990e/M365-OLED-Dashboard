@@ -27,6 +27,3 @@ The Arduino TX/RX pins will go to hi impedance state leaving the communication B
 By this way you can update de M365 firmware without disconnecting the dashboard or any cable.   
 
 A new power cycle will reset the dashboard to normal mode.   
-
-# UI
-WIP
