@@ -3,7 +3,7 @@
 
 Credit & Original code from: https://github.com/augisbud/m365_dashboard 
 
-Modified for my own usage and liking, original uses a Ardunio Mini, but I am using a Arduino Mini for this.
+Modified for my own usage and liking, original uses a Ardunio Mini, but I am using a Arduino Pro Nano for this.
 
 # Products Used
 Arduino Pro Nano  
@@ -24,6 +24,6 @@ These libraries are needed for the code to work, can be installed inside the Ard
 Turn on the scooter and immediately engage and hold the throttle and brake before the logo disappears from the dashboard LCD. You will enter on dashboard disabled mode.
 The Arduino TX/RX pins will go to hi impedance state leaving the communication BUS free.   
 
-By this way you can update de M365 firmware without disconnecting the dashboard or any cable.   
+By this way you can update the M365 firmware without disconnecting the dashboard or any cable.   
 
 A new power cycle will reset the dashboard to normal mode.   
